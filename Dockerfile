@@ -10,11 +10,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Fichiers du scraper
 COPY scraper_betpawa.py .
 COPY server.py .
+COPY session.json .
 
-# session.json sera injectée via variable d'environnement (voir server.py)
-# On ne la copie PAS dans l'image pour ne pas exposer les credentials
-
-# Port requis par Render
-EXPOSE 8080
+# Port Render (utilise la variable PORT, défaut 10000)
+EXPOSE 10000
 
 CMD ["python3", "server.py"]
