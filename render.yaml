@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: aviator-scraper
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    envVars:
+      - key: SESSION_JSON
+        sync: false        # à remplir manuellement dans le dashboard Render
+      - key: OUTPUT_FILE
+        value: resultats_betpawa.csv
