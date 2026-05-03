@@ -4,11 +4,7 @@ server.py
 ─────────
 Serveur HTTP minimal requis par Render.
 Lance le scraper en arrière-plan dans un thread séparé.
-La session BetPawa est chargée depuis la variable d'env SESSION_JSON.
-
-Variables d'environnement Render à configurer :
-  SESSION_JSON   → contenu de session.json (copier-coller le JSON complet)
-  OUTPUT_FILE    → nom du CSV (défaut: resultats_betpawa.csv)
+La session BetPawa est chargée depuis session.json (inclus dans le repo).
 """
 
 import os
@@ -20,22 +16,14 @@ from datetime import datetime
 from pathlib import Path
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
-# ── Charger la session depuis la variable d'env ──────────────────
-SESSION_JSON_ENV = os.environ.get("SESSION_JSON", "")
-OUTPUT_FILE      = os.environ.get("OUTPUT_FILE", "resultats_betpawa.csv")
-
+# ── Charger la session depuis le fichier ────────────────────────
+OUTPUT_FILE  = os.environ.get("OUTPUT_FILE", "resultats_betpawa.csv")
 SESSION_FILE = "/app/session.json"
-if SESSION_JSON_ENV:
-    try:
-        data = json.loads(SESSION_JSON_ENV)
-        with open(SESSION_FILE, "w") as f:
-            json.dump(data, f)
-        print("[INIT] session.json chargée depuis SESSION_JSON", flush=True)
-    except Exception as e:
-        print(f"[INIT] Erreur parsing SESSION_JSON: {e}", flush=True)
-        SESSION_FILE = None
+
+if Path(SESSION_FILE).exists():
+    print("[INIT] session.json trouvé ✓", flush=True)
 else:
-    print("[INIT] Aucune SESSION_JSON fournie !", flush=True)
+    print("[INIT] ⚠️  session.json introuvable !", flush=True)
     SESSION_FILE = None
 
 
